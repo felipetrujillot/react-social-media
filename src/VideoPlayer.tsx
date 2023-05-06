@@ -1,35 +1,91 @@
 import { useState, useEffect, useRef } from "react";
+import axios from "axios";
 
+type resVideo = {};
 export default function VideoPlayer() {
+  const [indexVideo, setIndexVideo] = useState(0);
+
+  const listRef = useRef(null);
   const [urlVideo, getUrlVideo] = useState([
     {
       id: 1,
-      nombre: "test",
+      name: "test",
+      description: "description example",
       url: "https://www.w3schools.com/html/mov_bbb.mp4",
+      username: "usuario",
+      isPlaying : true,
+      avatar:
+        "https://yt3.ggpht.com/yti/AHyvSCBD5sw66_mpeb96OzZ_vzwlHJ0K-c3xkpG1wxIBDA=s88-c-k-c0x00ffffff-no-rj-mo",
     },
     {
       id: 2,
-      nombre: "test",
+      name: "test",
+      description: "description example",
       url: "https://www.w3schools.com/html/mov_bbb.mp4",
+      username: "usuario",
+      isPlaying : false,
+      avatar:
+        "https://yt3.ggpht.com/yti/AHyvSCBD5sw66_mpeb96OzZ_vzwlHJ0K-c3xkpG1wxIBDA=s88-c-k-c0x00ffffff-no-rj-mo",
     },
     {
       id: 3,
-      nombre: "test",
+      name: "test",
+      description: "description example",
       url: "https://www.w3schools.com/html/mov_bbb.mp4",
+      username: "usuario",
+      isPlaying : false,
+      avatar:
+        "https://yt3.ggpht.com/yti/AHyvSCBD5sw66_mpeb96OzZ_vzwlHJ0K-c3xkpG1wxIBDA=s88-c-k-c0x00ffffff-no-rj-mo",
+    },
+    {
+      id: 4,
+      name: "test",
+      description: "description example",
+      url: "https://www.w3schools.com/html/mov_bbb.mp4",
+      username: "usuario",
+      isPlaying : false,
+      avatar:
+        "https://yt3.ggpht.com/yti/AHyvSCBD5sw66_mpeb96OzZ_vzwlHJ0K-c3xkpG1wxIBDA=s88-c-k-c0x00ffffff-no-rj-mo",
+    },
+    {
+      id: 5,
+      name: "test",
+      description: "description example",
+      url: "https://www.w3schools.com/html/mov_bbb.mp4",
+      username: "usuario",
+      isPlaying : false,
+      avatar:
+        "https://yt3.ggpht.com/yti/AHyvSCBD5sw66_mpeb96OzZ_vzwlHJ0K-c3xkpG1wxIBDA=s88-c-k-c0x00ffffff-no-rj-mo",
     },
   ]);
-  const [indexVideo, setIndexVideo] = useState(0);
-  const listRef = useRef(null);
+
+  /**
+   * Obtiene vídeos aleatorios de la api
+   */
+  const getVideos = async () => {
+    await axios
+      .get("/images")
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
 
   const handleScrollUp = () => {
-    if (indexVideo > 0){
+    if (indexVideo > 0) {
+      urlVideo[indexVideo].isPlaying = false
       setIndexVideo(indexVideo - 1);
-    } 
+      urlVideo[indexVideo - 1].isPlaying = true
+    }
   };
   const handleScrollDown = () => {
-    if (indexVideo >= 0){
+    if (indexVideo >= 0 && urlVideo.length > indexVideo + 1) {
+      urlVideo[indexVideo].isPlaying = false
       setIndexVideo(indexVideo + 1);
-    } 
+      urlVideo[indexVideo + 1].isPlaying = true
+    }
   };
 
   useEffect(() => {
@@ -43,13 +99,8 @@ export default function VideoPlayer() {
       }
     };
     window.addEventListener("wheel", handleWheel);
-
-    if (listRef.current) {
-
-      if(indexVideo >= 0){
-        listRef.current.style.transform = `translateY(-${indexVideo * 93}vh)`;
-      }
-      
+    if (listRef.current && indexVideo >= 0) {
+      listRef.current.style.transform = `translateY(-${indexVideo * 93}vh)`;
     }
     return () => {
       window.removeEventListener("wheel", handleWheel);
@@ -58,25 +109,57 @@ export default function VideoPlayer() {
 
   return (
     <div>
-      {/*   <button onClick={handleScrollUp}>Up</button>
-      <button onClick={handleScrollDown}>Down</button> */}
       <div className="p-5 h500px bg-dark justify-content-center d-flex ">
         <div className="animationScroll" ref={listRef}>
           {urlVideo.map((url, index) => (
-            <div className="d-flex" key={index}>
+            <div className="d-flex" key={url.id}>
               <div className="videoWrapper">
-                <video
-                  className="cover rounded videoClass pb-5"
-                  key={index}
-                  src={url.url}
-                  controls
-                  /*  autoPlay */
-                  muted
-                  typeof="video/mp4"
-                />
-                <div className="video-overlay">
-                  <h2 className="video-title">My Video Title</h2>
-                  <p className="video-subtitle">My Video Subtitle</p>
+                {url.isPlaying ? (
+                  <video
+                    className="cover rounded videoClass pb-5"
+                    /*poster="https://images.pexels.com/photos/6381851/pexels-photo-6381851.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"*/
+                    key={index}
+                    src={url.url}
+                    id={"videoId"}
+                    muted
+                    autoPlay
+                    typeof="video/mp4"
+                  />
+                ) : (
+                  <img
+                    className="rounded videoClass pb-5"
+                    style={{ objectFit: "cover" }}
+                    src="https://images.pexels.com/photos/6381851/pexels-photo-6381851.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                  />
+                )}
+
+                <div className="video-overlay text-start">
+                  <div className="w-100 text-start p-3">
+                    <h3>{url.name}</h3>
+                    <p>{url.description}</p>
+                    <div className="d-flex">
+                      <div>
+                        <img
+                          src={url.avatar}
+                          height={50}
+                          width={50}
+                          className="avatar"
+                        />
+                      </div>
+                      <div>
+                        <p className="pt-2 ps-2 fw-b">@{url.username}</p>
+                      </div>
+
+                      <div>
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => playContent()}
+                        >
+                          play
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="ms-3">
