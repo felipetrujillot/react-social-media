@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 
-function VideoPlayer() {
+export default function VideoPlayer() {
   const [urlVideo, getUrlVideo] = useState([
     "https://www.w3schools.com/html/mov_bbb.mp4",
     "https://www.w3schools.com/html/mov_bbb.mp4",
     "https://www.w3schools.com/html/mov_bbb.mp4",
     "https://www.w3schools.com/html/mov_bbb.mp4",
-    "https://www.w3schools.com/html/mov_bbb.mp4",
   ]);
+
 
   useEffect(() => {
     function handleWheel(event) {
@@ -25,20 +25,27 @@ function VideoPlayer() {
 
   return (
     <div>
-      {urlVideo.map((url, index) => (
-        <video 
-        width="400"
-        height="800"
-        className="cover rounded"
-        key={index} 
-        src={url} 
-        controls 
-       /*  autoPlay */
-        muted
-        />
-      ))}
+      <div
+        className="container p-5 h500px bg-dark justify-content-center d-flex"
+      >
+
+        <div>
+
+            {urlVideo.map((url, index) => (
+
+            <div className='videoWrapper'>
+              <video
+                className="cover rounded videoClass pb-5"
+                key={index}
+                src={url}
+                controls
+                /*  autoPlay */
+                muted
+              />
+            </div>
+            ))}
+          </div>
+      </div>
     </div>
   );
 }
-
-export default VideoPlayer;
