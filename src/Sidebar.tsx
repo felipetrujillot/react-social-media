@@ -1,7 +1,7 @@
 export default function Sidebar() {
   return (
     <div
-      className="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
+      className="d-flex flex-column flex-shrink-0 p-3 text-bg-dark d-none d-sm-none d-md-block"
       style={{ width: "280px" }}
     >
       <a
