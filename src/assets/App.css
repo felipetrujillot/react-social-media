@@ -1,0 +1,18 @@
+body {
+  background-color: rgb(51, 51, 51);
+  color:white
+}
+
+#root {
+}
+
+.wrapper {
+  /* min-width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden; */
+}
+
+.cover {
+
+  object-fit: cover;
+}
